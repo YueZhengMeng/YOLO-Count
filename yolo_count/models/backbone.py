@@ -1,13 +1,14 @@
-from typing import List, Tuple, Union, Sequence, Optional
 import itertools
+from typing import List, Tuple, Union, Sequence, Optional
+
 import torch
 import torch.nn as nn
-
 from transformers import (
     AutoTokenizer,
     CLIPTextConfig,
     CLIPTextModelWithProjection as CLIPTP,
 )
+
 from yolo_count.models.module import (
     ConvModule,
     make_divisible,
@@ -19,11 +20,11 @@ from yolo_count.models.module import (
 
 class HuggingCLIPLanguageBackbone(nn.Module):
     def __init__(
-        self,
-        model_name: str,
-        frozen_modules: Sequence[str] = (),
-        dropout: float = 0.0,
-        training_use_cache: bool = False,
+            self,
+            model_name: str,
+            frozen_modules: Sequence[str] = (),
+            dropout: float = 0.0,
+            training_use_cache: bool = False,
     ) -> None:
         super().__init__()
 
@@ -120,17 +121,17 @@ class YOLOv8CSPDarknet(nn.Module):
     }
 
     def __init__(
-        self,
-        arch: str = "P5",
-        last_stage_out_channels: int = 1024,
-        plugins: Union[dict, List[dict]] = None,
-        deepen_factor: float = 1.0,
-        widen_factor: float = 1.0,
-        input_channels: int = 3,
-        out_indices: Tuple[int] = (2, 3, 4),
-        frozen_stages: int = -1,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
+            self,
+            arch: str = "P5",
+            last_stage_out_channels: int = 1024,
+            plugins: Union[dict, List[dict]] = None,
+            deepen_factor: float = 1.0,
+            widen_factor: float = 1.0,
+            input_channels: int = 3,
+            out_indices: Tuple[int] = (2, 3, 4),
+            frozen_stages: int = -1,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
     ):
         super().__init__()
 
@@ -251,11 +252,11 @@ class YOLOv8CSPDarknet(nn.Module):
 
 class MultiModalYOLOBackbone(nn.Module):
     def __init__(
-        self,
-        image_model: nn.Module,
-        text_model: Optional[nn.Module] = None,
-        frozen_stages: int = -1,
-        with_text_model: bool = True,
+            self,
+            image_model: nn.Module,
+            text_model: Optional[nn.Module] = None,
+            frozen_stages: int = -1,
+            with_text_model: bool = True,
     ) -> None:
         super().__init__()
 
@@ -281,7 +282,7 @@ class MultiModalYOLOBackbone(nn.Module):
             self._freeze_stages()
 
     def forward(
-        self, image: torch.Tensor, text: List[List[str]]
+            self, image: torch.Tensor, text: List[List[str]]
     ) -> Tuple[Tuple[torch.Tensor], Optional[torch.Tensor]]:
         img_feats = self.image_model(image)
 

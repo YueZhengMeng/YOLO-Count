@@ -1,10 +1,11 @@
-from torch.utils.data import DataLoader
 import os
+
+from torch.utils.data import DataLoader
+
 from yolo_count.models.yolocount import build_yolocount_model_base
-from yolo_count.utils.validation import evaluate_on_fsc
 from yolo_count.utils.dataload import FSCData
 from yolo_count.utils.fn import auto_load
-
+from yolo_count.utils.validation import evaluate_on_fsc
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

@@ -34,7 +34,9 @@
 
 ---
 
-This repository contains the official implementation of **YOLO-Count**, a fully differentiable and open-vocabulary object counting model. YOLO-Count is designed to provide accurate object count estimation and enable fine-grained quantity control for text-to-image (T2I) generation models.
+This repository contains the official implementation of **YOLO-Count**, a fully differentiable and open-vocabulary
+object counting model. YOLO-Count is designed to provide accurate object count estimation and enable fine-grained
+quantity control for text-to-image (T2I) generation models.
 
 ---
 
@@ -52,9 +54,11 @@ pip install -r requirements.txt
 
 ## Dataset Preparation
 
-YOLO-Count is trained and evaluated on multiple object counting benchmarks. Please download and organize each dataset as follows.
+YOLO-Count is trained and evaluated on multiple object counting benchmarks. Please download and organize each dataset as
+follows.
 
 ### FSC147
+
 - Download **FSC147** from  
   https://github.com/cvlab-stonybrook/LearningToCountEverything
 - Place the following folders under:
@@ -65,23 +69,29 @@ YOLO-Count is trained and evaluated on multiple object counting benchmarks. Plea
   ```
 
 ### Open Images v7 (OImgv7)
+
 Download Open Images v7 using:
+
 ```bash
 python -m scripts.download_oimgv7
 ```
 
 ### Objects365 (Obj365)
+
 Download the validation images with:
+
 ```bash
 python -m scripts.download_o365
 ```
 
 Then organize the data as:
+
 ```text
 data/Obj365/objects365/val
 ```
 
 ### LVIS
+
 - Download **LVIS**
 - Place all files under:
   ```text
@@ -112,13 +122,13 @@ python -m scripts.eval_fsc
 
 The table below reports counting performance using **Mean Absolute Error (MAE)** and **Root Mean Squared Error (RMSE)**.
 
-| Dataset  | Split       | MAE     | RMSE     |
-|----------|-------------|---------|----------|
-| FSC      | Test        | 15.6745 | 96.3807  |
-| FSC      | Validation  | 14.8297 | 59.6979  |
-| LVIS     | Validation  | 1.5379  | 5.6076   |
-| OImgv7   | Validation  | 3.7087  | 12.0285  |
-| Obj365   | Validation  | 3.2749  | 9.2181   |
+| Dataset | Split      | MAE     | RMSE    |
+|---------|------------|---------|---------|
+| FSC     | Test       | 15.6745 | 96.3807 |
+| FSC     | Validation | 14.8297 | 59.6979 |
+| LVIS    | Validation | 1.5379  | 5.6076  |
+| OImgv7  | Validation | 3.7087  | 12.0285 |
+| Obj365  | Validation | 3.2749  | 9.2181  |
 
 ---
 

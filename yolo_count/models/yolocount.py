@@ -1,18 +1,20 @@
 from typing import List, Tuple, Optional, Union
+
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.checkpoint import checkpoint
-import matplotlib.pyplot as plt
 from PIL import Image
+from torch.utils.checkpoint import checkpoint
+
 from yolo_count.models.backbone import (
     MultiModalYOLOBackbone,
     HuggingCLIPLanguageBackbone,
     YOLOv8CSPDarknet,
 )
-from yolo_count.models.neck import YOLOCountPAFPN
 from yolo_count.models.head import ProportionCountingHead
+from yolo_count.models.neck import YOLOCountPAFPN
 from yolo_count.utils.fn import aspect_based_center_mask
 
 
@@ -124,7 +126,7 @@ class YOLOCount(nn.Module):
         return ProportionCountingHead(**cfg)
 
     def extract_feat(
-        self, batch_inputs: torch.Tensor, texts: Optional[List[List[str]]] = None
+            self, batch_inputs: torch.Tensor, texts: Optional[List[List[str]]] = None
     ) -> Tuple[Tuple[torch.Tensor], torch.Tensor]:
         """Extract features
 
@@ -142,7 +144,7 @@ class YOLOCount(nn.Module):
         return img_feats1, img_feats2, txt_feats
 
     def _forward(
-        self, batch_inputs: torch.Tensor, texts: Optional[List[List[str]]] = None
+            self, batch_inputs: torch.Tensor, texts: Optional[List[List[str]]] = None
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """Forward pass
 
@@ -180,19 +182,19 @@ class YOLOCount(nn.Module):
         self.text_feats = self.backbone.forward_text(texts)
 
     def strong_loss(
-        self,
-        image_inputs: torch.Tensor,
-        texts: List[List[str]],
-        gt_category_labels: torch.Tensor,
-        gt_proportion_labels: torch.Tensor,
+            self,
+            image_inputs: torch.Tensor,
+            texts: List[List[str]],
+            gt_category_labels: torch.Tensor,
+            gt_proportion_labels: torch.Tensor,
     ) -> torch.Tensor:
         cls_logits, proportion_pred = self._forward(image_inputs, texts)
         loss_category = F.binary_cross_entropy_with_logits(
             cls_logits, gt_category_labels, reduction="mean"
         )
         loss_proportion = (
-            F.l1_loss(proportion_pred, gt_proportion_labels, reduction="sum")
-            / image_inputs.shape[0]
+                F.l1_loss(proportion_pred, gt_proportion_labels, reduction="sum")
+                / image_inputs.shape[0]
         )
         loss = loss_category + loss_proportion
         loss_dict = {
@@ -203,11 +205,11 @@ class YOLOCount(nn.Module):
         return loss, loss_dict
 
     def weak_loss_for_strong_labels(
-        self,
-        image_inputs: torch.Tensor,
-        texts: List[List[str]],
-        gt_category_labels: torch.Tensor,
-        gt_proportion_labels: torch.Tensor,
+            self,
+            image_inputs: torch.Tensor,
+            texts: List[List[str]],
+            gt_category_labels: torch.Tensor,
+            gt_proportion_labels: torch.Tensor,
     ) -> torch.Tensor:
 
         cls_logits, proportion_pred = self._forward(image_inputs, texts)
@@ -215,8 +217,8 @@ class YOLOCount(nn.Module):
             cls_logits, gt_category_labels, reduction="mean"
         )
         loss_proportion = (
-            F.l1_loss(proportion_pred, gt_proportion_labels, reduction="sum")
-            / image_inputs.shape[0]
+                F.l1_loss(proportion_pred, gt_proportion_labels, reduction="sum")
+                / image_inputs.shape[0]
         )
         loss = loss_category + 0.0 * loss_proportion
         loss_dict = {
@@ -227,11 +229,11 @@ class YOLOCount(nn.Module):
         return loss, loss_dict
 
     def weak_loss(
-        self,
-        image_inputs: torch.Tensor,
-        texts: List[List[str]],
-        gt_category_labels: torch.Tensor,
-        gt_valid_label_masks: torch.Tensor,
+            self,
+            image_inputs: torch.Tensor,
+            texts: List[List[str]],
+            gt_category_labels: torch.Tensor,
+            gt_valid_label_masks: torch.Tensor,
     ) -> torch.Tensor:
 
         cls_logits, proportion_pred = self._forward(image_inputs, texts)
@@ -249,10 +251,10 @@ class YOLOCount(nn.Module):
             )
             p = torch.sigmoid(cls_logits[valid_positions])
             p_t = p * gt_category_labels[valid_positions] + (1 - p) * (
-                1 - gt_category_labels[valid_positions]
+                    1 - gt_category_labels[valid_positions]
             )
             alpha_t = alpha * gt_category_labels[valid_positions] + (1 - alpha) * (
-                1 - gt_category_labels[valid_positions]
+                    1 - gt_category_labels[valid_positions]
             )
             loss_category = (alpha_t * (1 - p_t) ** gamma * bce_loss).mean()
 
@@ -271,11 +273,11 @@ class YOLOCount(nn.Module):
         return loss, loss_dict
 
     def weak_loss_fake(
-        self,
-        image_inputs: torch.Tensor,
-        texts: List[List[str]],
-        gt_category_labels: torch.Tensor,
-        gt_proportion_labels: torch.Tensor,
+            self,
+            image_inputs: torch.Tensor,
+            texts: List[List[str]],
+            gt_category_labels: torch.Tensor,
+            gt_proportion_labels: torch.Tensor,
     ) -> torch.Tensor:
 
         cls_logits, proportion_pred = self._forward(image_inputs, texts)
@@ -306,19 +308,19 @@ class YOLOCount(nn.Module):
         return loss, loss_dict
 
     def predict(
-        self,
-        image_inputs: torch.Tensor,
-        texts: List[List[str]],
-        original_hw: List[Tuple[int, int]] = None,
-        large_threshold: float = float("inf"),
-        confidence_threshold: float = 0.0,
-        demonstrate: bool = False,
-        gt_count: Optional[float] = None,
+            self,
+            image_inputs: torch.Tensor,
+            texts: List[List[str]],
+            original_hw: List[Tuple[int, int]] = None,
+            large_threshold: float = float("inf"),
+            confidence_threshold: float = 0.0,
+            demonstrate: bool = False,
+            gt_count: Optional[float] = None,
     ) -> Union[Tuple[torch.Tensor, str], Tuple[torch.Tensor, str, Image.Image]]:
 
         if demonstrate:
             assert (
-                image_inputs.shape[0] == len(texts) == len(original_hw) == 1
+                    image_inputs.shape[0] == len(texts) == len(original_hw) == 1
             ), "Demonstrate mode only supports batch size 1"
 
         cls_logits, proportion_pred = self._forward(image_inputs, texts)
@@ -369,7 +371,7 @@ class YOLOCount(nn.Module):
             pad_w = (640 - w) // 2
             density_map = torch.zeros((h, w), device=image_inputs.device)
             valid_pred = (proportion_pred[b, 0] * pred_masks[b, 0])[
-                pad_h // 8 : (pad_h + h) // 8, pad_w // 8 : (pad_w + w) // 8
+                pad_h // 8: (pad_h + h) // 8, pad_w // 8: (pad_w + w) // 8
             ]
             density_map = F.interpolate(
                 valid_pred.unsqueeze(0).unsqueeze(0),
@@ -379,7 +381,7 @@ class YOLOCount(nn.Module):
             )[0, 0]
             if torch.sum(density_map) != 0:
                 density_map = density_map * (
-                    torch.sum(valid_pred) / torch.sum(density_map)
+                        torch.sum(valid_pred) / torch.sum(density_map)
                 )
             h_mid = h // 2
             w_mid = w // 2
@@ -394,7 +396,7 @@ class YOLOCount(nn.Module):
             for y_slice, x_slice in sub_regions:
                 img_h_slice = slice(pad_h + y_slice.start, pad_h + y_slice.stop)
                 img_w_slice = slice(pad_w + x_slice.start, pad_w + x_slice.stop)
-                sub_img = image_inputs[b : b + 1, :, img_h_slice, img_w_slice]
+                sub_img = image_inputs[b: b + 1, :, img_h_slice, img_w_slice]
                 h_sub, w_sub = sub_img.shape[2:]
                 max_size = max(h_sub, w_sub)
                 pad_h_sub = (max_size - h_sub) // 2
@@ -408,7 +410,7 @@ class YOLOCount(nn.Module):
                 )
 
                 sub_cls_logits, sub_proportion_pred = self._forward(
-                    resized_img, texts[b : b + 1]
+                    resized_img, texts[b: b + 1]
                 )
                 sub_cls_probs = torch.sigmoid(sub_cls_logits)
 
@@ -422,8 +424,8 @@ class YOLOCount(nn.Module):
                 if sub_pred.sum() > 0:
                     sub_resized = F.interpolate(
                         sub_pred[
-                            pad_h // 8 : (pad_h + sub_h) // 8,
-                            pad_w // 8 : (pad_w + sub_w) // 8,
+                            pad_h // 8: (pad_h + sub_h) // 8,
+                            pad_w // 8: (pad_w + sub_w) // 8,
                         ]
                         .unsqueeze(0)
                         .unsqueeze(0),
@@ -434,7 +436,7 @@ class YOLOCount(nn.Module):
 
                     if torch.sum(sub_resized) != 0:
                         sub_resized = (
-                            sub_resized * torch.sum(sub_pred) / torch.sum(sub_resized)
+                                sub_resized * torch.sum(sub_pred) / torch.sum(sub_resized)
                         )
 
                     orig_region = density_map[y_slice, x_slice]
@@ -474,16 +476,16 @@ class YOLOCount(nn.Module):
             return self._forward(**kwargs)
 
     def _generate_demonstration(
-        self,
-        image: torch.Tensor,
-        text: List[str],
-        cls_probs: torch.Tensor,
-        unmasked_proportion: torch.Tensor,
-        proportion_pred: torch.Tensor,
-        pred_mask: torch.Tensor,
-        pred_count: float,
-        gt_count: Optional[float],
-        confidence_threshold: float,
+            self,
+            image: torch.Tensor,
+            text: List[str],
+            cls_probs: torch.Tensor,
+            unmasked_proportion: torch.Tensor,
+            proportion_pred: torch.Tensor,
+            pred_mask: torch.Tensor,
+            pred_count: float,
+            gt_count: Optional[float],
+            confidence_threshold: float,
     ) -> Image.Image:
 
         img = image.permute(1, 2, 0).cpu().numpy()

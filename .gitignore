@@ -21,3 +21,5 @@ eval/
 /data/OImgv7/data
 /data/OImgv7/labels.json
 /data/LVIS/
+
+.idea

@@ -1,9 +1,11 @@
 import os
+
 from torch.utils.data import DataLoader
+
 from yolo_count.models.yolocount import build_yolocount_model_base
-from yolo_count.utils.validation import evaluate_on_lvis
 from yolo_count.utils.dataload import LVISData
 from yolo_count.utils.fn import auto_load
+from yolo_count.utils.validation import evaluate_on_lvis
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

@@ -1,17 +1,19 @@
-from tqdm import tqdm
 import math
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from tqdm import tqdm
+
 from yolo_count.utils.fn import wrap_hw
 
 
 def evaluate_on_fsc(
-    model: nn.Module,
-    dataloader: DataLoader,
-    large_threshold: int = float("inf"),
-    confidence_threshold: float = 0.0,
-    save_file=None,
+        model: nn.Module,
+        dataloader: DataLoader,
+        large_threshold: int = float("inf"),
+        confidence_threshold: float = 0.0,
+        save_file=None,
 ) -> None:
     model.cuda()
     model.eval()
@@ -55,7 +57,7 @@ def evaluate_on_fsc(
 
 
 def evaluate_on_lvis(
-    model: nn.Module, dataloader: DataLoader, confidence_threshold: float = 0.0
+        model: nn.Module, dataloader: DataLoader, confidence_threshold: float = 0.0
 ) -> None:
     model.cuda()
     model.eval()
@@ -83,7 +85,7 @@ def evaluate_on_lvis(
 
 
 def evaluate_on_obj365(
-    model: nn.Module, dataloader: DataLoader, confidence_threshold: float = 0.0
+        model: nn.Module, dataloader: DataLoader, confidence_threshold: float = 0.0
 ) -> None:
     model.cuda()
     model.eval()
@@ -110,7 +112,7 @@ def evaluate_on_obj365(
 
 
 def evaluate_on_oimgv7(
-    model: nn.Module, dataloader: DataLoader, confidence_threshold: float = 0.0
+        model: nn.Module, dataloader: DataLoader, confidence_threshold: float = 0.0
 ) -> None:
     model.cuda()
     model.eval()

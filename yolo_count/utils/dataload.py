@@ -1,26 +1,27 @@
-from typing import Tuple
-import os
 import json
+import os
+from typing import Tuple
+
 import cv2
 import inflect
 import numpy as np
 import torch
-from torch.utils.data import Dataset
-from pycocotools.coco import COCO
-from lvis import LVIS
 from datasets import load_dataset
+from lvis import LVIS
+from pycocotools.coco import COCO
+from torch.utils.data import Dataset
 
 
 class FSCData(Dataset):
     """FSC147 dataset loader"""
 
     def __init__(
-        self,
-        root: str,
-        split: str,
-        flip: bool = True,
-        img_res: int = 640,
-        cell_res: int = 80,
+            self,
+            root: str,
+            split: str,
+            flip: bool = True,
+            img_res: int = 640,
+            cell_res: int = 80,
     ):
         super().__init__()
         self.root = root
@@ -143,12 +144,12 @@ class WeakFSCData(FSCData):
     """Weakly supervised FSC147 dataset loader"""
 
     def __init__(
-        self,
-        root: str,
-        split: str,
-        flip: bool = True,
-        img_res: int = 640,
-        cell_res: int = 80,
+            self,
+            root: str,
+            split: str,
+            flip: bool = True,
+            img_res: int = 640,
+            cell_res: int = 80,
     ):
         super().__init__(root, split, flip, img_res, cell_res)
 
@@ -253,12 +254,12 @@ class COCOData(Dataset):
     """COCO dataset loader"""
 
     def __init__(
-        self,
-        root: str,
-        split: str,
-        flip: bool = True,
-        img_res: int = 640,
-        cell_res: int = 80,
+            self,
+            root: str,
+            split: str,
+            flip: bool = True,
+            img_res: int = 640,
+            cell_res: int = 80,
     ):
         super().__init__()
         self.root = root
@@ -404,12 +405,12 @@ class LVISData(Dataset):
     """LVIS dataset loader"""
 
     def __init__(
-        self,
-        root: str,
-        split: str,
-        flip: bool = True,
-        img_res: int = 640,
-        cell_res: int = 80,
+            self,
+            root: str,
+            split: str,
+            flip: bool = True,
+            img_res: int = 640,
+            cell_res: int = 80,
     ):
         super().__init__()
         self.root = root
@@ -652,13 +653,13 @@ class Obj365Data(Dataset):
 
 class OImgv7Data(Dataset):
     def __init__(
-        self,
-        root: str,
-        split: str,
-        flip: bool = False,
-        novel_only: bool = True,
-        img_res: int = 640,
-        cell_res: int = 80,
+            self,
+            root: str,
+            split: str,
+            flip: bool = False,
+            novel_only: bool = True,
+            img_res: int = 640,
+            cell_res: int = 80,
     ):
         super().__init__()
         self.root = root

@@ -1,8 +1,9 @@
-from typing import List, Tuple
-from PIL import Image
 import os
-import torch
+from typing import List, Tuple
+
 import numpy as np
+import torch
+from PIL import Image
 
 
 def number_parameters(model):
@@ -10,7 +11,7 @@ def number_parameters(model):
 
 
 def aspect_based_center_mask(
-    hw_list: List[Tuple[int, int]], save_path: str = None
+        hw_list: List[Tuple[int, int]], save_path: str = None
 ) -> torch.Tensor:
     """
     Generate a binary mask based on image aspect ratio indicating the valid area

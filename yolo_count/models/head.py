@@ -1,8 +1,10 @@
 from typing import List, Tuple
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
+
 from yolo_count.models.module import ConvModule, make_divisible
 
 
@@ -62,13 +64,13 @@ class ContrastiveHead(nn.Module):
 class ProportionCountingHead(nn.Module):
 
     def __init__(
-        self,
-        in_channels: List[int],
-        embed_dims: int,
-        widen_factor: float = 1.0,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
-        freeze_all: bool = False,
+            self,
+            in_channels: List[int],
+            embed_dims: int,
+            widen_factor: float = 1.0,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
+            freeze_all: bool = False,
     ):
         super().__init__()
         self.embed_dims = make_divisible(embed_dims, widen_factor)
@@ -233,10 +235,10 @@ class ProportionCountingHead(nn.Module):
                     param.requires_grad = False
 
     def forward(
-        self,
-        img_feats_1: Tuple[torch.Tensor],
-        img_feats_2: Tuple[torch.Tensor],
-        txt_feats: torch.Tensor,
+            self,
+            img_feats_1: Tuple[torch.Tensor],
+            img_feats_2: Tuple[torch.Tensor],
+            txt_feats: torch.Tensor,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
 
         feat_80 = self.conv_80_cls(img_feats_1[0])

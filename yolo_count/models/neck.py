@@ -1,6 +1,8 @@
 from typing import List, Union
+
 import torch
 import torch.nn as nn
+
 from yolo_count.models.module import (
     ConvModule,
     make_divisible,
@@ -13,18 +15,18 @@ class YOLOCountPAFPN(nn.Module):
     """Path Aggregation Network used in YOLO World."""
 
     def __init__(
-        self,
-        in_channels: List[int],
-        out_channels: Union[List[int], int],
-        guide_channels: int,
-        embed_channels: List[int],
-        num_heads: List[int],
-        deepen_factor: float = 1.0,
-        widen_factor: float = 1.0,
-        num_csp_blocks: int = 3,
-        freeze_all: bool = False,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
+            self,
+            in_channels: List[int],
+            out_channels: Union[List[int], int],
+            guide_channels: int,
+            embed_channels: List[int],
+            num_heads: List[int],
+            deepen_factor: float = 1.0,
+            widen_factor: float = 1.0,
+            num_csp_blocks: int = 3,
+            freeze_all: bool = False,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
     ) -> None:
         super().__init__()
 
@@ -127,7 +129,7 @@ class YOLOCountPAFPN(nn.Module):
         )
 
     def forward(
-        self, img_feats: List[torch.Tensor], txt_feats: torch.Tensor = None
+            self, img_feats: List[torch.Tensor], txt_feats: torch.Tensor = None
     ) -> tuple:
         """Forward function."""
         assert len(img_feats) == len(

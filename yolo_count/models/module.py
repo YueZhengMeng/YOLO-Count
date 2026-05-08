@@ -1,5 +1,6 @@
-from typing import Union, Tuple, Optional, Sequence, Dict
 import math
+from typing import Union, Tuple, Optional, Sequence, Dict
+
 import torch
 import torch.nn as nn
 
@@ -17,22 +18,22 @@ def make_round(x: float, deepen_factor: float = 1.0) -> int:
 class ConvModule(nn.Module):
 
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        kernel_size: Union[int, Tuple[int, int]],
-        stride: Union[int, Tuple[int, int]] = 1,
-        padding: Union[int, Tuple[int, int]] = 0,
-        dilation: Union[int, Tuple[int, int]] = 1,
-        groups: int = 1,
-        bias: Union[bool, str] = "auto",
-        conv_cfg: Optional[Dict] = None,
-        norm_cfg: Optional[Dict] = None,
-        act_cfg: Optional[Dict] = dict(type="ReLU"),
-        inplace: bool = True,
-        with_spectral_norm: bool = False,
-        padding_mode: str = "zeros",
-        order: tuple = ("conv", "norm", "act"),
+            self,
+            in_channels: int,
+            out_channels: int,
+            kernel_size: Union[int, Tuple[int, int]],
+            stride: Union[int, Tuple[int, int]] = 1,
+            padding: Union[int, Tuple[int, int]] = 0,
+            dilation: Union[int, Tuple[int, int]] = 1,
+            groups: int = 1,
+            bias: Union[bool, str] = "auto",
+            conv_cfg: Optional[Dict] = None,
+            norm_cfg: Optional[Dict] = None,
+            act_cfg: Optional[Dict] = dict(type="ReLU"),
+            inplace: bool = True,
+            with_spectral_norm: bool = False,
+            padding_mode: str = "zeros",
+            order: tuple = ("conv", "norm", "act"),
     ):
         super().__init__()
 
@@ -98,9 +99,9 @@ class ConvModule(nn.Module):
 
     def init_weights(self):
         if (
-            self.with_activation
-            and hasattr(self, "act_cfg")
-            and self.act_cfg["type"] == "LeakyReLU"
+                self.with_activation
+                and hasattr(self, "act_cfg")
+                and self.act_cfg["type"] == "LeakyReLU"
         ):
             nn.init.kaiming_normal_(
                 self.conv.weight,
@@ -115,7 +116,7 @@ class ConvModule(nn.Module):
             nn.init.constant_(self.norm.bias, 0)
 
     def forward(
-        self, x: torch.Tensor, activate: bool = True, norm: bool = True
+            self, x: torch.Tensor, activate: bool = True, norm: bool = True
     ) -> torch.Tensor:
         for layer in self.order:
             if layer == "conv":
@@ -162,20 +163,20 @@ class DepthwiseSeparableConvModule(nn.Module):
     """
 
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        kernel_size: Union[int, Tuple[int, int]],
-        stride: Union[int, Tuple[int, int]] = 1,
-        padding: Union[int, Tuple[int, int]] = 0,
-        dilation: Union[int, Tuple[int, int]] = 1,
-        norm_cfg: Optional[Dict] = None,
-        act_cfg: Dict = dict(type="ReLU"),
-        dw_norm_cfg: Union[Dict, str] = "default",
-        dw_act_cfg: Union[Dict, str] = "default",
-        pw_norm_cfg: Union[Dict, str] = "default",
-        pw_act_cfg: Union[Dict, str] = "default",
-        **kwargs
+            self,
+            in_channels: int,
+            out_channels: int,
+            kernel_size: Union[int, Tuple[int, int]],
+            stride: Union[int, Tuple[int, int]] = 1,
+            padding: Union[int, Tuple[int, int]] = 0,
+            dilation: Union[int, Tuple[int, int]] = 1,
+            norm_cfg: Optional[Dict] = None,
+            act_cfg: Dict = dict(type="ReLU"),
+            dw_norm_cfg: Union[Dict, str] = "default",
+            dw_act_cfg: Union[Dict, str] = "default",
+            pw_norm_cfg: Union[Dict, str] = "default",
+            pw_act_cfg: Union[Dict, str] = "default",
+            **kwargs
     ):
         super().__init__()
         assert "groups" not in kwargs, "groups should not be specified"
@@ -246,17 +247,17 @@ class DarknetBottleneck(nn.Module):
     """
 
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        expansion: float = 0.5,
-        kernel_size: Sequence[int] = (1, 3),
-        padding: Sequence[int] = (0, 1),
-        add_identity: bool = True,
-        use_depthwise: bool = False,
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
+            self,
+            in_channels: int,
+            out_channels: int,
+            expansion: float = 0.5,
+            kernel_size: Sequence[int] = (1, 3),
+            padding: Sequence[int] = (0, 1),
+            add_identity: bool = True,
+            use_depthwise: bool = False,
+            conv_cfg: Optional[dict] = None,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
     ) -> None:
         super().__init__()
 
@@ -317,15 +318,15 @@ class CSPLayerWithTwoConv(nn.Module):
     """
 
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        expand_ratio: float = 0.5,
-        num_blocks: int = 1,
-        add_identity: bool = True,  # shortcut
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
+            self,
+            in_channels: int,
+            out_channels: int,
+            expand_ratio: float = 0.5,
+            num_blocks: int = 1,
+            add_identity: bool = True,  # shortcut
+            conv_cfg: Optional[dict] = None,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
     ) -> None:
         super().__init__()
 
@@ -396,15 +397,15 @@ class SPPFBottleneck(nn.Module):
     """
 
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        kernel_sizes: Union[int, Sequence[int]] = 5,
-        use_conv_first: bool = True,
-        mid_channels_scale: float = 0.5,
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
+            self,
+            in_channels: int,
+            out_channels: int,
+            kernel_sizes: Union[int, Sequence[int]] = 5,
+            use_conv_first: bool = True,
+            mid_channels_scale: float = 0.5,
+            conv_cfg: Optional[dict] = None,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
     ):
         super().__init__()
 
@@ -468,24 +469,24 @@ class SPPFBottleneck(nn.Module):
 
 class MaxSigmoidAttnBlock(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        guide_channels: int,
-        embed_channels: int,
-        kernel_size: int = 3,
-        padding: int = 1,
-        num_heads: int = 1,
-        use_depthwise: bool = False,
-        with_scale: bool = False,
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        use_einsum: bool = True,
+            self,
+            in_channels: int,
+            out_channels: int,
+            guide_channels: int,
+            embed_channels: int,
+            kernel_size: int = 3,
+            padding: int = 1,
+            num_heads: int = 1,
+            use_depthwise: bool = False,
+            with_scale: bool = False,
+            conv_cfg: Optional[dict] = None,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            use_einsum: bool = True,
     ) -> None:
         super().__init__()
 
         assert (
-            out_channels % num_heads == 0 and embed_channels % num_heads == 0
+                out_channels % num_heads == 0 and embed_channels % num_heads == 0
         ), "out_channels and embed_channels should be divisible by num_heads."
 
         self.num_heads = num_heads
@@ -543,7 +544,7 @@ class MaxSigmoidAttnBlock(nn.Module):
             attn_weight = attn_weight.reshape(batch, m, height, width, n)
 
         attn_weight = attn_weight.max(dim=-1)[0]
-        attn_weight = attn_weight / (self.head_channels**0.5)
+        attn_weight = attn_weight / (self.head_channels ** 0.5)
         attn_weight = attn_weight + self.bias[None, :, None, None]
         attn_weight = attn_weight.sigmoid() * self.scale
 
@@ -558,20 +559,20 @@ class MaxSigmoidCSPLayerWithTwoConv(nn.Module):
     """Sigmoid-attention based CSP layer with two convolution layers."""
 
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        guide_channels: int,
-        embed_channels: int,
-        num_heads: int = 1,
-        expand_ratio: float = 0.5,
-        num_blocks: int = 1,
-        with_scale: bool = False,
-        add_identity: bool = True,
-        conv_cfg: Optional[dict] = None,
-        norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
-        act_cfg: dict = dict(type="SiLU", inplace=True),
-        use_einsum: bool = True,
+            self,
+            in_channels: int,
+            out_channels: int,
+            guide_channels: int,
+            embed_channels: int,
+            num_heads: int = 1,
+            expand_ratio: float = 0.5,
+            num_blocks: int = 1,
+            with_scale: bool = False,
+            add_identity: bool = True,
+            conv_cfg: Optional[dict] = None,
+            norm_cfg: dict = dict(type="BN", momentum=0.03, eps=0.001),
+            act_cfg: dict = dict(type="SiLU", inplace=True),
+            use_einsum: bool = True,
     ) -> None:
         super().__init__()
 
