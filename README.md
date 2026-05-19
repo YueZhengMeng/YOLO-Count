@@ -152,3 +152,13 @@ If you find this work useful in your research, please consider citing:
 ## License
 
 This repository is released under the [CC-BY-SA 4.0](LICENSE) license.
+
+## 复现
+
+| Dataset | Split      | MAE     | RMSE    | 
+|---------|------------|---------|---------|
+| FSC     | Test       | 15.6737 | 96.3850 |
+| FSC     | Validation | 14.8289 | 59.6976 |
+| LVIS    | Validation | 1.5766  | 5.1325  |
+| OImgv7  | Validation | 3.7215  | 11.9608 |
+| Obj365  | Validation | 3.2875  | 9.2945  |
