@@ -101,7 +101,7 @@ class FSCData(Dataset):
         img_id = img_name.split(".")[0]
 
         # Load image
-        img_path = os.path.join(self.root, "images_384_VarV2", img_name)
+        img_path = os.path.join("F://REC-8K/FSC147_384_V2", "images_384_VarV2", img_name)
         img = cv2.imread(img_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         original_hw = img.shape[:2]
@@ -109,7 +109,7 @@ class FSCData(Dataset):
 
         # Load density map
         density_path = os.path.join(
-            self.root, "gt_density_map_adaptive_384_VarV2", f"{img_id}.npy"
+            "F://REC-8K/FSC147_384_V2", "gt_density_map_adaptive_384_VarV2", f"{img_id}.npy"
         )
         density = np.load(density_path)
         density = self.padding_and_resize(density, self.cell_res, keep_sum=True)
@@ -420,7 +420,7 @@ class LVISData(Dataset):
         self.cell_res = cell_res
 
         # Use correct LVIS annotation file naming
-        anno_file = os.path.join(root, f"annotations/lvis_v1_{split}.json")
+        anno_file = os.path.join(root, f"lvis_v1_{split}.json")
         self.lvis = LVIS(anno_file)
 
         # Get all image IDs and filter out images without annotations
@@ -550,7 +550,7 @@ class LVISData(Dataset):
 
 class Obj365Data(Dataset):
     def __init__(self, root, novel_only=True, split="validation"):
-        self.hf_id = "jxu124/objects365"
+        self.hf_id = "F://YOLO_Count_Data/object365"
         self.novel_only = novel_only
         self.split = split
         self.root = root
@@ -626,7 +626,8 @@ class Obj365Data(Dataset):
 
     def __getitem__(self, idx):
         hf_info = self.hf_dataset[idx]
-        image_path = os.path.join(self.root, hf_info["image_path"])
+        image_path = os.path.join("F://YOLO_Count_Data/object365/images/val",
+                                  hf_info["image_path"].replace("objects365/val/", ""))
         anns_info = hf_info["anns_info"]
         img = cv2.imread(image_path)
         if img is None:
@@ -670,7 +671,7 @@ class OImgv7Data(Dataset):
         self.novel_only = novel_only
         self.novel_categories = []
 
-        anno_file = os.path.join(root, f"labels.json")
+        anno_file = os.path.join("F://YOLO_Count_Data/OImgv7", f"labels.json")
         self.coco = COCO(anno_file)
 
         all_image_ids = list(self.coco.imgs.keys())
@@ -762,7 +763,7 @@ class OImgv7Data(Dataset):
 
         category_id = np.random.choice(self.image_categories[img_id])
 
-        img_path = os.path.join(self.root, f"data", img_info["file_name"])
+        img_path = os.path.join("F://YOLO_Count_Data/OImgv7", f"data", img_info["file_name"])
         img = cv2.imread(img_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = self.padding_and_resize(img, self.img_res)

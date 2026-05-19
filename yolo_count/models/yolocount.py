@@ -37,7 +37,7 @@ def build_yolocount_model_base():
             "last_stage_out_channels": 512,
         },
         "text_model": {
-            "model_name": "openai/clip-vit-base-patch32",
+            "model_name": "F://model/clip-vit-base-patch32",
             "frozen_modules": ["all"],
         },
     }
@@ -69,7 +69,7 @@ def build_yolocount_model_large():
             "widen_factor": widen_factor,
         },
         "text_model": {
-            "model_name": "openai/clip-vit-base-patch32",
+            "model_name": "F://model/clip-vit-base-patch32",
             "frozen_modules": ["all"],
         },
     }

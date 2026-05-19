@@ -71,7 +71,7 @@ def download(url, dir=".", unzip=True, delete=True, curl=True, threads=1, retry=
             download_one(u, dir)
 
 
-dir = Path("object365")  #
+dir = Path("F:/YOLO_Count_Data/object365")
 # Make Directories
 for p in "images", "labels":
     (dir / p).mkdir(parents=True, exist_ok=True)
